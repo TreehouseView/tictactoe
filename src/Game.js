@@ -88,16 +88,11 @@ class Board extends React.Component {
 class Game extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            winner: null,
-            lastMove: 'O',
-            history: [],
-            squares: Array(16).fill(null),
-            squareStyle: Array(16).fill('square'),
-        };
+        this.state = this.initGameState();
         this.handleBoardAction = this.handleBoardAction.bind(this);
         this.handleTimeTravel = this.handleTimeTravel.bind(this);
         this.handleSquareClick = this.handleSquareClick.bind(this);
+        this.handleNewGameAction = this.handleNewGameAction.bind(this);
     }
 
     /**
@@ -267,6 +262,23 @@ class Game extends React.Component {
         });
     }
 
+    initGameState() {
+        return {
+            winner: null,
+            lastMove: 'O',
+            history: [],
+            squares: Array(16).fill(null),
+            squareStyle: Array(16).fill('square'),
+        };
+        
+    }
+
+    handleNewGameAction() {
+        this.setState((state) => {
+            return this.initGameState();
+        });
+    }
+
     handleBoardAction(action) {
         this.setState((state) => {
             return {
@@ -298,7 +310,12 @@ class Game extends React.Component {
             let player = (this.state.lastMove === 'O') ?'X' : 'O';
             status = 'Next player: ' + player.toString();
         }
+        let newButton = 'New Game';
         return (
+            <div>
+                <button
+                    onClick={() => this.handleNewGameAction()}
+                >{newButton}</button>
             <div className="game">
                 <div className="game-board">
                 <div className="status">{status}</div>
@@ -313,6 +330,7 @@ class Game extends React.Component {
                     <div>Moves</div>
                     <ol>{items}</ol>
                 </div>
+            </div>
             </div>
         );
     }
